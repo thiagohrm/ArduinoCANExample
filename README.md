@@ -10,7 +10,7 @@ the idea here is to use a PC with any sort of CAN adapter and send a CAN message
 - [MCP2515 Lib from AutoWP](https://github.com/autowp/arduino-mcp2515)
 - [DHT11 Lib from AdaFruit](https://github.com/adafruit/DHT-sensor-library)
 - [Adafruit Unified Driver from Adafruit](https://github.com/adafruit/Adafruit_Sensor)
-- [16x2 LCD I2C Lib] (https://www.arduinolibraries.info/libraries/liquid-crystal-i2-c)
+- [16x2 LCD I2C Lib](https://www.arduinolibraries.info/libraries/liquid-crystal-i2-c)
 
 # Schematics #
 ![image](https://user-images.githubusercontent.com/17009943/210840281-2bbf5742-b14b-4bd0-9204-a7b6d7a8929d.png)
