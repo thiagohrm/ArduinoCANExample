@@ -57,24 +57,27 @@ void loop() {
       Serial.print(" ");
     }
 
-    Serial.println();   
-    switch(canMsgRcvd.can_id){
-      case 0x01:
-        if(digitalRead(TEMP_CONFIG & canMsgRcvd.data[0] == 1)){
-          sendCANMessage(0x04,dht.readTemperature());            
-        }
-        break;
-      case 0x02:
-        if(digitalRead(HUMI_CONFIG & canMsgRcvd.data[0] == 1)){
-          sendCANMessage(0x05,dht.readHumidity());
-        }
-        break;
-      case 0x03:
-        if(digitalRead(STR_CONFIG & canMsgRcvd.data[0] == 1)){
-          sendCANMessageStrings(0x06);
-        }
-        break;
+    Serial.println();
+    if(canMsgRcvd.data[0] == 1){
+      switch(canMsgRcvd.can_id){
+        case 0x01:
+          if(digitalRead(TEMP_CONFIG)){
+            sendCANMessage(0x04,dht.readTemperature());            
+          }
+          break;
+        case 0x02:
+          if(digitalRead(HUMI_CONFIG)){
+            sendCANMessage(0x05,dht.readHumidity());
+          }
+          break;
+        case 0x03:
+          if(digitalRead(STR_CONFIG)){
+            sendCANMessageStrings(0x06);
+          }
+          break;
+      }
     }
+
   }
 }
 
