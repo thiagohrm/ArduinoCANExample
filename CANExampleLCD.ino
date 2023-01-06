@@ -46,9 +46,6 @@ void setup() {
 }
 
 void loop() {  
-  lcd.setCursor(1,0);
-  lcd.print("Requesting new data ");
-
   sendCANMessage(1,1);
   sendCANMessage(2,1);
 
@@ -71,8 +68,7 @@ void loop() {
       case 0x05:
         hum = canMsgRcvd.data[0];
         break;
-      }
-    lcd.clear();
+    }
     lcd.setCursor(1,0);
     lcd.print("Temperature = ");
     lcd.print(temp);
