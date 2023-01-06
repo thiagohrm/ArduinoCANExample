@@ -10,7 +10,6 @@
 #define lin  2
 #define address  0x3F
 
-const long interval = 2000;
 
 struct can_frame canMsgRcvd;
 struct can_frame canMsgSend;
@@ -18,7 +17,6 @@ MCP2515 mcp2515(10);
 LiquidCrystal_I2C lcd(address,col,lin);
 int temp = 0;
 int hum = 0;
-unsigned long previousMillis = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -47,49 +45,37 @@ void setup() {
   canMsgSend.data[7] = 0x00;
 }
 
-void loop() {
-  unsigned long currentMillis = millis();
-  bool msgRet = false;
-    
-  if (currentMillis - previousMillis >= interval) {
-    previousMillis = currentMillis;
+void loop() {  
+  sendCANMessage(1,1);
+  sendCANMessage(2,1);
 
-    lcd.setCursor(1,0);
-    lcd.print("Requesting new data ");
-
-    sendCANMessage(1,1);
-    sendCANMessage(2,1);
-
-    if (mcp2515.readMessage(&canMsgRcvd) == MCP2515::ERROR_OK) {
-      Serial.print(canMsgRcvd.can_id, HEX); // print ID
-      Serial.print(" "); 
-      Serial.print(canMsgRcvd.can_dlc, HEX); // print DLC
-      Serial.print(" ");
+  if (mcp2515.readMessage(&canMsgRcvd) == MCP2515::ERROR_OK) {
+    Serial.print(canMsgRcvd.can_id, HEX); // print ID
+    Serial.print(" "); 
+    Serial.print(canMsgRcvd.can_dlc, HEX); // print DLC
+    Serial.print(" ");
       
-      for (int i = 0; i<canMsgRcvd.can_dlc; i++)  {  // print the data
-        Serial.print(canMsgRcvd.data[i],HEX);
-        Serial.print(" ");
-      }
-
-      Serial.println(); 
-      if(canMsgRcvd.data[0] == 1){
-        switch(canMsgRcvd.can_id){
-          case 0x04:
-            temp = canMsgRcvd.data[0];
-            break;
-          case 0x05:
-            hum = canMsgRcvd.data[0];
-            break;
-        }
-        lcd.clear();
-        lcd.setCursor(1,0);
-        lcd.print("Temperature = ");
-        lcd.print(temp);
-        lcd.setCursor(2,0);
-        lcd.print("Humidity = ");
-        lcd.print(hum);
-      }
+    for (int i = 0; i<canMsgRcvd.can_dlc; i++)  {  // print the data
+      Serial.print(canMsgRcvd.data[i],HEX);
+      Serial.print(" ");
     }
+    Serial.println(); 
+
+    switch(canMsgRcvd.can_id){
+      case 0x04:
+        temp = canMsgRcvd.data[0];
+        break;
+      case 0x05:
+        hum = canMsgRcvd.data[0];
+        break;
+    }
+    lcd.setCursor(1,0);
+    lcd.print("Temperature = ");
+    lcd.print(temp);
+    lcd.setCursor(2,0);
+    lcd.print("Humidity = ");
+    lcd.print(hum);
+    delay(200);
   }
 }
 
