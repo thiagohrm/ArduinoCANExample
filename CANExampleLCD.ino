@@ -81,6 +81,7 @@ void loop() {
             hum = canMsgRcvd.data[0];
             break;
         }
+        lcd.clear();
         lcd.setCursor(1,0);
         lcd.print("Temperature = ");
         lcd.print(temp);
